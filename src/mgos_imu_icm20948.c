@@ -247,6 +247,43 @@ bool mgos_imu_icm20948_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data
   return true;
 }
 
+bool mgos_imu_icm20948_acc_enable_wom(struct mgos_imu_acc *dev, void *imu_user_data, uint8_t threshold_mg) {
+  if (!dev) {
+    return false;
+  }
+
+  // Enable interrupt
+  if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 0)) {
+    return false;
+  }
+  mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_REG0_INT_ENABLE, 0x08);
+  mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_REG0_INT_ENABLE_1, 0x00);
+
+  // Configure
+  if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 2)) {
+    return false;
+  }
+  // REG2_ACCEL_INTEL_CTRL: ACCEL_INTEL_EN=1; ACCEL_INTEL_MODE_INT=1(Compare with previous);
+  mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_REG2_ACCEL_INTEL_CTRL, 0x03);
+  mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_REG2_ACCEL_WOM_THR, threshold_mg);
+}
+
+bool mgos_imu_icm20948_acc_wom_int_status(struct mgos_imu_acc *dev, void *imu_user_data) {
+  uint8_t status = 0;
+
+  if (!dev) {
+    return false;
+  }
+
+  if(!mgos_imu_icm20948_change_bank(dev->i2c, dev->i2caddr, imu_user_data, 0)) {
+    return false;
+  }
+  status = mgos_i2c_read_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_REG0_INT_STATUS);
+
+  // INT_STAUS: WOM_INT==1;
+  return status & 0x8;
+}
+
 bool mgos_imu_icm20948_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data) {
   return mgos_imu_icm20948_detect(dev->i2c, dev->i2caddr, imu_user_data);
 }
