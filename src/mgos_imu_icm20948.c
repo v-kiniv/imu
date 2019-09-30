@@ -266,6 +266,8 @@ bool mgos_imu_icm20948_acc_enable_wom(struct mgos_imu_acc *dev, void *imu_user_d
   // REG2_ACCEL_INTEL_CTRL: ACCEL_INTEL_EN=1; ACCEL_INTEL_MODE_INT=1(Compare with previous);
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_REG2_ACCEL_INTEL_CTRL, 0x03);
   mgos_i2c_write_reg_b(dev->i2c, dev->i2caddr, MGOS_ICM20948_REG2_ACCEL_WOM_THR, threshold_mg);
+
+  return true;
 }
 
 bool mgos_imu_icm20948_acc_wom_int_status(struct mgos_imu_acc *dev, void *imu_user_data) {
