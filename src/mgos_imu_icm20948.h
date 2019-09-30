@@ -30,7 +30,10 @@
 #define MGOS_ICM20948_REG0_LP_CONFIG            (0x05)
 #define MGOS_ICM20948_REG0_PWR_MGMT_1           (0x06)
 #define MGOS_ICM20948_REG0_PWR_MGMT_2           (0x07)
+#define MGOS_ICM20948_REG0_INT_ENABLE           (0x10)
+#define MGOS_ICM20948_REG0_INT_ENABLE_1         (0x11)
 #define MGOS_ICM20948_REG0_INT_PIN_CFG          (0x0f)
+#define MGOS_ICM20948_REG0_INT_STATUS           (0x19)
 #define MGOS_ICM20948_REG0_ACCEL_XOUT_H         (0x2d)
 #define MGOS_ICM20948_REG0_GYRO_XOUT_H          (0x33)
 #define MGOS_ICM20948_REG0_EXT_SLV_SENS_DATA_00 (0x3b)
@@ -39,6 +42,8 @@
 #define MGOS_ICM20948_REG2_GYRO_CONFIG_1        (0x01)
 #define MGOS_ICM20948_REG2_ACCEL_SMPLRT_DIV_1   (0x10)
 #define MGOS_ICM20948_REG2_ACCEL_SMPLRT_DIV_2   (0x11)
+#define MGOS_ICM20948_REG2_ACCEL_INTEL_CTRL     (0x12)
+#define MGOS_ICM20948_REG2_ACCEL_WOM_THR        (0x13)
 #define MGOS_ICM20948_REG2_ACCEL_CONFIG         (0x14)
 #define MGOS_ICM20948_REG3_I2C_MST_CTRL         (0x01)
 #define MGOS_ICM20948_REG3_I2C_SLV0_ADDR        (0x03)
@@ -67,6 +72,8 @@ bool mgos_imu_icm20948_acc_get_scale(struct mgos_imu_acc *dev, void *imu_user_da
 bool mgos_imu_icm20948_acc_set_scale(struct mgos_imu_acc *dev, void *imu_user_data, float scale);
 bool mgos_imu_icm20948_acc_get_odr(struct mgos_imu_acc *dev, void *imu_user_data, float *odr);
 bool mgos_imu_icm20948_acc_set_odr(struct mgos_imu_acc *dev, void *imu_user_data, float odr);
+bool mgos_imu_icm20948_acc_enable_wom(struct mgos_imu_acc *dev, void *imu_user_data, uint8_t threshold_mg);
+bool mgos_imu_icm20948_acc_wom_int_status(struct mgos_imu_acc *dev, void *imu_user_data);
 
 bool mgos_imu_icm20948_gyro_detect(struct mgos_imu_gyro *dev, void *imu_user_data);
 bool mgos_imu_icm20948_gyro_create(struct mgos_imu_gyro *dev, void *imu_user_data);
